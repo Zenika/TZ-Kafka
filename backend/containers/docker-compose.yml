@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   zoo1:
-    image: zookeeper
+    image: zookeeper:3.4.9
     restart: unless-stopped
     hostname: zoo1
     ports:
@@ -17,7 +17,7 @@ services:
 
 
   kafka1:
-    image: confluentinc/cp-kafka
+    image: confluentinc/cp-kafka:5.0.0
     hostname: kafka1
     ports:
       - "9092:9092"
@@ -31,13 +31,11 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - ./full-stack/kafka1/data:/var/lib/kafka/data
-    links:
-      - zoo1
     depends_on:
       - zoo1
 
   kafka-schema-registry:
-    image: confluentinc/cp-schema-registry
+    image: confluentinc/cp-schema-registry:5.0.0
     hostname: kafka-schema-registry
     ports:
       - "8081:8081"
@@ -45,9 +43,6 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
       SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
-    links:
-      - zoo1
-      - kafka1
     depends_on:
       - zoo1
       - kafka1
@@ -62,12 +57,38 @@ services:
       KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
       KAFKA_REST_HOST_NAME: kafka-rest-proxy
-      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:9092
-    links:
-      - zoo1  
-      - kafka1
-      - kafka-schema-registry     
+      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
     depends_on:
-      - zoo1  
+      - zoo1
       - kafka1
       - kafka-schema-registry
+
+  kafka-connect:
+    image: confluentinc/cp-kafka-connect
+    hostname: kafka-connect
+    ports:
+      - "8083:8083"
+    environment:
+      CONNECT_BOOTSTRAP_SERVERS: "kafka1:19092"
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: compose-connect-group
+      CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
+      CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
+      CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://kafka-schema-registry:8081'
+      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
+      CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
+      CONNECT_LOG4J_LOGGERS: "org.apache.kafka.connect.runtime.rest=WARN,org.reflections=ERROR"
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+    depends_on:
+      - zoo1
+      - kafka1
+      - kafka-schema-registry
+      - kafka-rest-proxy
