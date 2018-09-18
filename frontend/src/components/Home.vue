@@ -1,18 +1,27 @@
 <template>
   <div>
     <section class='section home-page'>
-      {{this.token.username}}
+      <matches></matches>
+      <prono></prono>
     </section>
   </div>
 </template>
 
 <script>
 import '../service/match'
+import matches from './Matches'
+import prono from './Prono'
 
 export default {
+  components: {
+    'Matches': matches,
+    'Prono': prono
+  },
   name: 'Home',
+
   data () {
     return {
+      loaded: false,
       get token () {
         return JSON.parse(localStorage.getItem('user-token'))
       }
@@ -22,8 +31,4 @@ export default {
 </script>
 
 <style scoped>
-  .home-page {
-    margin-top: 40px;
-  }
-
 </style>

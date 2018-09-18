@@ -6,9 +6,9 @@ const axiosRequest = axios.create({
   timeout: 1000
 })
 
-var matches = new Subject()
+var pronoList = new Subject()
 export default {
-  matches
+  pronoList
 }
 
 var baseURI = ''
@@ -30,7 +30,7 @@ function createConsumer () {
 }
 
 function subscribeToTopics () {
-  var data = {'topics': ['match']}
+  var data = {'topics': ['prono']}
   axiosRequest.post(baseURI + '/subscription', data,
     {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
@@ -41,13 +41,14 @@ function subscribeToTopics () {
 }
 
 function getRecords () {
+  console.log(baseURI)
   axios.get(baseURI + '/records',
     {headers: {'Accept': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         response.data.map(record => {
-          if (record.topic === 'match') {
-            matches.next(record.value)
+          if (record.topic === 'prono') {
+            pronoList.next(record.value)
           }
         })
         setTimeout(getRecords, 1000)

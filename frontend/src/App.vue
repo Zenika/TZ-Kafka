@@ -2,12 +2,6 @@
     <div id="app">
       <nav class="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <router-link class="navbar-item" to="/">
-            <i class="fa fa-home" aria-hidden="true"></i>
-            Accueil</router-link>
-          <router-link class="navbar-item" v-if="this.token" to="/account" icon="fa-user">
-            <i class="fa fa-user" aria-hidden="true"></i>
-            Mon compte</router-link>
           <router-link class="navbar-item" v-if="this.token" to="/logout" icon="fa-power-off">
             <i class="fa fa-power-off" aria-hidden="true"></i>
           </router-link>

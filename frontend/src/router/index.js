@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import Login from '@/components/Login'
 import Logout from '@/components/Logout'
+import Prono from '@/components/Prono'
 
 Vue.use(Router)
 
@@ -24,6 +25,12 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/prono',
+      name: 'Prono',
+      component: Prono,
+      beforeEnter: checkAuth
     }
   ]
 })
