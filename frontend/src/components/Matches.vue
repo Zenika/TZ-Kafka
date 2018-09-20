@@ -29,8 +29,8 @@
                 {{ props.row.date }}
               </b-table-column>
               <b-table-column field="date" label="Misc" sortable centered>
-                <button v-if="hasNoResult(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
-                <div v-else class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
+                <button v-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
+                <div v-else-if="!hasNoResult(props.row)" class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
               </b-table-column>
             </template>
           </b-table>
@@ -105,6 +105,9 @@ export default {
     }
   },
   methods: {
+    isPronostiquable (match) {
+      return this.hasNoResult(match) && moment(match.date, 'DD/MM/YYYY HH:mm:ss').isAfter(moment())
+    },
     getResult (match) {
       var result = this.results.filter(result => {
         return match.id === result.matchId
