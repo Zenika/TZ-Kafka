@@ -43,7 +43,6 @@ export default {
   },
   methods: {
     redirect: function () {
-      console.log('Redirect')
       this.$router.push('/')
     },
     login: function () {

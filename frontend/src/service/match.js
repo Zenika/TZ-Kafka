@@ -17,10 +17,10 @@ function createConsumer () {
     'format': 'json'
   }
   axiosRequest.post('http://localhost:8082/consumers/' + uuidv4(), data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
+      'Access-Control-Allow-Origin': '*'}})
     .then(
       (response) => {
-        console.log(response)
         // instanceID = response.data.instance_id
         baseURI = response.data.base_uri
         baseURI = baseURI.replace('kafka-rest-proxy', 'localhost')
@@ -32,7 +32,8 @@ function createConsumer () {
 function subscribeToTopics () {
   var data = {'topics': ['match']}
   axiosRequest.post(baseURI + '/subscription', data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
+      'Access-Control-Allow-Origin': '*'}})
     .then(
       (response) => {
         getRecords()
@@ -42,7 +43,8 @@ function subscribeToTopics () {
 
 function getRecords () {
   axios.get(baseURI + '/records',
-    {headers: {'Accept': 'application/vnd.kafka.json.v2+json'}})
+    {headers: {'Accept': 'application/vnd.kafka.json.v2+json',
+      'Access-Control-Allow-Origin': '*'}})
     .then(
       (response) => {
         response.data.map(record => {

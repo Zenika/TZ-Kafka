@@ -26,8 +26,8 @@
               <td>{{ match.teamA }}</td>
               <td>{{ match.teamB }}</td>
               <td>{{ match.date }}</td>
-              <td><button class="button is-block is-info is-large is-fullwidth" v-on:click="displayProno(match)">Pronostiquer</button></td>
-
+              <td v-if="hasNoResult(match)"><button  class="button is-block is-info" v-on:click="displayProno(match)">Pronostiquer</button></td>
+              <td v-else>{{getResult(match)[0].teamA}} - {{getResult(match)[0].teamB}}</td>
             </tr>
             </tbody>
           </table>
@@ -74,6 +74,7 @@
 
 <script>
 import matchesLib from '../service/match'
+import resultsLib from '../service/results'
 import BCollapse from 'buefy/src/components/collapse/Collapse'
 import axios from 'axios'
 export default {
@@ -82,6 +83,9 @@ export default {
     matchesLib.matches.subscribe(match => {
       this.loaded = true
       this.matches.push(match)
+    })
+    resultsLib.resultsList.subscribe(result => {
+      this.results.push(result)
     })
   },
   name: 'Matches',
@@ -92,10 +96,21 @@ export default {
       matchList: true,
       matchToBet: {},
       loaded: false,
-      matches: []
+      matches: [],
+      results: []
     }
   },
   methods: {
+    getResult (match) {
+      var result = this.results.filter(result => {
+        return match.id === result.matchId
+      })
+      console.log(result)
+      return result
+    },
+    hasNoResult (match) {
+      return this.getResult(match).length === 0
+    },
     hideProno () {
       this.matchToBet = {}
       this.matchList = true
