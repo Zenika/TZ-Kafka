@@ -8,6 +8,7 @@ import 'buefy/dist/buefy.css'
 import 'font-awesome/css/font-awesome.css'
 
 Vue.use(Buefy)
+Vue.use(require('vue-moment'))
 
 Vue.config.productionTip = false
 

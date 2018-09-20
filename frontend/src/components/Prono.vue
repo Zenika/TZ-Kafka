@@ -12,26 +12,36 @@
     <div class="card-content">
       <div v-if="loaded">
         <div v-if="pronos.length > 0">
-          <table class="table">
-            <thead>
-            <tr>
-              <th><abbr title="home">Utilisateur</abbr></th>
-              <th><abbr title="away">Equipe domicile</abbr></th>
-              <th><abbr title="date">Score domicile</abbr></th>
-              <th><abbr title="away">Equipe visiteur</abbr></th>
-              <th><abbr title="date">Score visiteur</abbr></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="prono in pronos" :key="prono.offset">
-              <td>{{ JSON.parse(prono.user).username }}</td>
-              <td>{{ prono.match.teamA }}</td>
-              <td>{{ prono.scoreHome }}</td>
-              <td>{{ prono.match.teamB }}</td>
-              <td>{{ prono.scoreAway}}</td>
-            </tr>
-            </tbody>
-          </table>
+          <b-table
+            :data="pronos"
+            :paginated="false"
+            default-sort="date">
+            <template slot-scope="props">
+              <b-table-column field="teamA" label="Utilisateur" sortable>
+                {{ JSON.parse(props.row.user).username}}
+              </b-table-column>
+
+              <b-table-column field="teamB" label="Equipe domicile" sortable>
+                {{ props.row.match.teamA }}
+              </b-table-column>
+
+              <b-table-column field="teamB" label="Score domicile" sortable>
+                {{ props.row.scoreHome }}
+              </b-table-column>
+
+              <b-table-column field="teamB" label="Equipe visiteuse" sortable>
+                {{ props.row.match.teamB }}
+              </b-table-column>
+
+              <b-table-column field="teamB" label="Score visiteur" sortable>
+                {{ props.row.scoreAway}}
+              </b-table-column>
+
+              <b-table-column field="date" label="Date du prono" sortable centered>
+                {{ props.row.date }}
+              </b-table-column>
+            </template>
+          </b-table>
         </div>
         <div v-else>
           Aucun prono

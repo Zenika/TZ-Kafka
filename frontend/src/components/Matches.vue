@@ -12,25 +12,28 @@
     <div class="card-content">
       <div v-if="loaded">
         <div v-if="matches.length > 0">
-          <table class="table">
-            <thead>
-            <tr>
-              <th><abbr title="home">Equipe domicile</abbr></th>
-              <th><abbr title="away">Equipe visiteur</abbr></th>
-              <th><abbr title="date">Date</abbr></th>
-              <th><abbr title="date">Actions</abbr></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="match in matches" :key="match.id">
-              <td>{{ match.teamA }}</td>
-              <td>{{ match.teamB }}</td>
-              <td>{{ match.date }}</td>
-              <td v-if="hasNoResult(match)"><button  class="button is-block is-info" v-on:click="displayProno(match)">Pronostiquer</button></td>
-              <td v-else>{{getResult(match)[0].teamA}} - {{getResult(match)[0].teamB}}</td>
-            </tr>
-            </tbody>
-          </table>
+          <b-table
+            :data="matches"
+            :paginated="false"
+            default-sort="date">
+            <template slot-scope="props">
+              <b-table-column field="teamA" label="Equipe domicile" sortable>
+                {{ props.row.teamA }}
+              </b-table-column>
+
+              <b-table-column field="teamB" label="Equipe visiteur" sortable>
+                {{ props.row.teamB }}
+              </b-table-column>
+
+              <b-table-column field="date" label="Date" sortable centered>
+                {{ props.row.date }}
+              </b-table-column>
+              <b-table-column field="date" label="Misc" sortable centered>
+                <button v-if="hasNoResult(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
+                <div v-else class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
+              </b-table-column>
+            </template>
+          </b-table>
         </div>
         <div v-else>
           Aucune competition
@@ -76,6 +79,7 @@
 import matchesLib from '../service/match'
 import resultsLib from '../service/results'
 import BCollapse from 'buefy/src/components/collapse/Collapse'
+import moment from 'moment'
 import axios from 'axios'
 export default {
   components: {BCollapse},
@@ -105,7 +109,6 @@ export default {
       var result = this.results.filter(result => {
         return match.id === result.matchId
       })
-      console.log(result)
       return result
     },
     hasNoResult (match) {
@@ -127,7 +130,8 @@ export default {
             'value': { 'match': this.matchToBet,
               'scoreHome': this.scoreHome,
               'scoreAway': this.scoreAway,
-              'user': user
+              'user': user,
+              'date': moment().format('DD/MM/YYYY HH:mm:ss')
             }
 
           }
@@ -149,6 +153,9 @@ export default {
 </script>
 
 <style scoped>
+  .button {
+    margin: 0 auto;
+  }
   .is-cancel {
     background-color: red;
     color: white;
