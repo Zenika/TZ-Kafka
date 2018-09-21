@@ -2,7 +2,7 @@ version: '2.1'
 
 services:
   zoo1:
-    image: zookeeper:3.4.9
+    image: zookeeper
     restart: unless-stopped
     hostname: zoo1
     ports:
@@ -11,13 +11,17 @@ services:
         ZOO_MY_ID: 1
         ZOO_PORT: 2181
         ZOO_SERVERS: server.1=zoo1:2888:3888
+        KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/zookeeper_jaas.conf
+          -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
     volumes:
+      - ./kafka:/etc/kafka
+      - ./kafka/secrets:/etc/kafka/secrets
       - ./full-stack/zoo1/data:/data
       - ./full-stack/zoo1/datalog:/datalog
 
 
   kafka1:
-    image: confluentinc/cp-kafka:5.0.0
+    image: confluentinc/cp-kafka
     hostname: kafka1
     ports:
       - "9092:9092"
@@ -29,13 +33,28 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_LOG4J_LOGGERS: "kafka.controller=INFO,kafka.producer.async.DefaultEventHandler=INFO,state.change.logger=INFO"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      KAFKA_SASL_ENABLED_MECHANISMS: OAUTHBEARER
+      KAFKA_SECURITY_INTER_BROKER_PROTOCOL: SASL_PLAINTEXT
+      KAFKA_SASL_MECHANISM_INTER_BROKER_PROTOCOL: OAUTHBEARER
+      KAFKA_SASL_LOGIN_CALLBACK_HANDLER_CLASS: org.apache.kafka.common.security.authenticator.SaslServerCallbackHandler
+      KAFKA_OPTS: -Djava.security.auth.login.config=/etc/kafka/secrets/kafka_server_jaas.conf
+        -Dzookeeper.authProvider.1=org.apache.zookeeper.server.auth.SASLAuthenticationProvider
+      KAFKA_SSL_KEYSTORE_FILENAME: kafka.broker.keystore.jks
+      KAFKA_SSL_KEYSTORE_CREDENTIALS: broker_keystore_creds
+      KAFKA_SSL_KEY_CREDENTIALS: broker_sslkey_creds
+      KAFKA_SSL_TRUSTSTORE_FILENAME: kafka.broker.truststore.jks
+      KAFKA_SSL_TRUSTSTORE_CREDENTIALS: broker_truststore_creds
     volumes:
+      - ./kafka:/etc/kafka
+      - ./kafka/secrets:/etc/kafka/secrets
       - ./full-stack/kafka1/data:/var/lib/kafka/data
     depends_on:
       - zoo1
 
   kafka-schema-registry:
-    image: confluentinc/cp-schema-registry:5.0.0
+    image: confluentinc/cp-schema-registry
     hostname: kafka-schema-registry
     ports:
       - "8081:8081"
@@ -58,10 +77,13 @@ services:
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
       KAFKA_REST_HOST_NAME: kafka-rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      KAFKA_SASL_ENABLED_MECHANISMS: OA
     depends_on:
       - zoo1
       - kafka1
       - kafka-schema-registry
+    volumes:
+      - ./kafka-rest-properties/:/etc/kafka-rest
 
   kafka-connect:
     image: confluentinc/cp-kafka-connect

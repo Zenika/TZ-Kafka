@@ -7,13 +7,16 @@ curl --request POST \
   --data '{
 	"records": [
 		{
-			"value": { "teamA":"Monaco", "teamB":"Angers","date":"25/09/2018", "id": "monaco_angers"}
+			"key": "monaco_angers",
+			"value": { "teamA":"Monaco", "teamB":"Angers","date":"25/09/2018"}
 		},
         {
-			"value": { "teamA":"Nantes", "teamB":"Nice","date":"25/09/2018", "id": "nantes_nice"}
+					"key": "nantes_nice",
+			"value": { "teamA":"Nantes", "teamB":"Nice","date":"25/09/2018"}
 		},
         {
-			"value": { "teamA":"Toulouse", "teamB":"Saint Etienne","date":"25/09/2018", "id": "toulouse_saint_etienne"}
+						"key": "toulouse_saint_etienne",
+			"value": { "teamA":"Toulouse", "teamB":"Saint Etienne","date":"25/09/2018"}
 		}
 	]
 }'
@@ -25,13 +28,16 @@ curl --request POST \
   --data '{
 	"records": [
 		{
-			"value": { "teamA":"Nantes", "teamB":"Reims","date":"16/09/2018", "id": "nantes_reims"}
+			"key":"nantes_reims",
+			"value": { "teamA":"Nantes", "teamB":"Reims","date":"16/09/2018"}
 		},
         {
-			"value": { "teamA":"Bordeaux", "teamB":"Nimes","date":"16/09/2018", "id": "bordeaux_nimes"}
+			"key":"bordeaux_nimes",
+			"value": { "teamA":"Bordeaux", "teamB":"Nimes","date":"16/09/2018"}
 		},
         {
-			"value": { "teamA":"Marseille", "teamB":"Guingamp","date":"16/09/2018", "id": "marseille_guingamp"}
+			"key":"marseille_guingamp",
+			"value": { "teamA":"Marseille", "teamB":"Guingamp","date":"16/09/2018"}
 		}
 	]
 }'
@@ -43,13 +49,16 @@ curl --request POST \
   --data '{
 	"records": [
 		{
-			"value": { "teamA":"0", "teamB":"0", "matchId":"nantes_reims"}
+			"key":"nantes_reims",
+			"value": { "teamA":"0", "teamB":"0"}
 		},
-        {
-			"value": { "teamA":"3", "teamB":"3", "matchId": "bordeaux_nimes"}
+    {
+			"key":"bordeaux_nimes",
+			"value": { "teamA":"3", "teamB":"3"}
 		},
-        {
-			"value": { "teamA":"4", "teamB":"Guingamp","matchId": "marseille_guingamp"}
+    {
+			"key":"marseille_	guingamp",
+			"value": { "teamA":"4", "teamB":"0"}
 		}
 	]
 }'

@@ -30,6 +30,7 @@
               </b-table-column>
               <b-table-column field="date" label="Misc" sortable centered>
                 <button v-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
+                <button v-else-if="isInWindow(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
                 <div v-else-if="!hasNoResult(props.row)" class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
               </b-table-column>
             </template>
@@ -105,6 +106,11 @@ export default {
     }
   },
   methods: {
+    isInWindow (match) {
+      var matchDate = moment(match.date, 'DD/MM/YYYY HH:mm:ss').subtract(1, 'd')
+      console.log(match)
+      return moment().isAfter(matchDate)
+    },
     isPronostiquable (match) {
       return this.hasNoResult(match) && moment(match.date, 'DD/MM/YYYY HH:mm:ss').isAfter(moment())
     },
@@ -130,7 +136,9 @@ export default {
       var data = {
         'records': [
           {
-            'value': { 'match': this.matchToBet,
+            'key': this.match.id,
+            'value': {
+              'match': this.matchToBet,
               'scoreHome': this.scoreHome,
               'scoreAway': this.scoreAway,
               'user': user,
@@ -156,6 +164,9 @@ export default {
 </script>
 
 <style scoped>
+  .gris {
+    background-color: gray;
+  }
   .button {
     margin: 0 auto;
   }
