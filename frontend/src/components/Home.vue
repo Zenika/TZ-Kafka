@@ -3,6 +3,7 @@
     <section class='section home-page'>
       <matches></matches>
       <prono></prono>
+      <score></score>
     </section>
   </div>
 </template>
@@ -11,11 +12,13 @@
 import '../service/match'
 import matches from './Matches'
 import prono from './Prono'
+import score from './Score'
 
 export default {
   components: {
     'Matches': matches,
-    'Prono': prono
+    'Prono': prono,
+    'Score': score
   },
   name: 'Home',
 
