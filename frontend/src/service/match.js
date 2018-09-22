@@ -17,8 +17,7 @@ function createConsumer () {
     'format': 'json'
   }
   axiosRequest.post('http://localhost:8082/consumers/' + uuidv4(), data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         // instanceID = response.data.instance_id
@@ -32,8 +31,7 @@ function createConsumer () {
 function subscribeToTopics () {
   var data = {'topics': ['match']}
   axiosRequest.post(baseURI + '/subscription', data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         getRecords()
@@ -43,13 +41,17 @@ function subscribeToTopics () {
 
 function getRecords () {
   axios.get(baseURI + '/records',
-    {headers: {'Accept': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'Accept': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         response.data.map(record => {
           if (record.topic === 'match') {
-            matches.next(record.value)
+            matches.next({
+              matchId: record.key,
+              teamA: record.value.teamA,
+              teamB: record.value.teamB,
+              date: record.value.date
+            })
           }
         })
         setTimeout(getRecords, 1000)

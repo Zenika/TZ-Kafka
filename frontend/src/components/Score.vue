@@ -21,7 +21,7 @@
                 {{ props.row.userId}}
               </b-table-column>
 
-              <b-table-column field="teamB" label="Equipe domicile" sortable>
+              <b-table-column field="teamB" label="Total Point" sortable>
                 {{ props.row.score }}
               </b-table-column>x
             </template>

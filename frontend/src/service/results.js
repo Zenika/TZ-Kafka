@@ -46,7 +46,11 @@ function getRecords () {
       (response) => {
         response.data.map(record => {
           if (record.topic === 'results') {
-            resultsList.next(record.value)
+            resultsList.next({
+              matchId: record.key,
+              teamA: record.value.teamA,
+              teamB: record.value.teamB
+            })
           }
         })
         setTimeout(getRecords, 1000)

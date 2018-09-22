@@ -58,10 +58,14 @@ services:
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
       KAFKA_REST_HOST_NAME: kafka-rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
+      KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,DELETE,OPTIONS,HEAD
     depends_on:
       - zoo1
       - kafka1
       - kafka-schema-registry
+    volumes:
+      - ./kafka-rest-proxy:/etc/kafka-rest
 
   kafka-connect:
     image: confluentinc/cp-kafka-connect

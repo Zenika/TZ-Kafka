@@ -46,7 +46,14 @@ function getRecords () {
       (response) => {
         response.data.map(record => {
           if (record.topic === 'prono') {
-            pronoList.next(record.value)
+            pronoList.next({
+              matchId: record.key,
+              match: record.value.match,
+              scoreHome: record.value.scoreHome,
+              scoreAway: record.value.scoreAway,
+              date: record.value.date,
+              user: record.value.user
+            })
           }
         })
         setTimeout(getRecords, 1000)

@@ -49,7 +49,11 @@ function getRecords () {
       (response) => {
         response.data.map(record => {
           if (record.topic === 'score_topic') {
-            scores.next(record.value)
+            scores.next({
+              matchId: record.key,
+              score: record.value.score,
+              userId: record.value.userId
+            })
           }
         })
         setTimeout(getRecords, 1000)
