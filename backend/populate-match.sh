@@ -6,14 +6,17 @@ curl --request POST \
   --header 'content-type: application/vnd.kafka.json.v2+json' \
   --data '{
 	"records": [
+				{
+			"value": { "teamA":"Bordeaux", "teamB":"Lille","date":"26/09/2018 19:00", "id": "bordeaux_lille"}
+		},
 		{
-			"value": { "teamA":"Monaco", "teamB":"Angers","date":"25/09/2018", "id": "monaco_angers"}
+			"value": { "teamA":"Monaco", "teamB":"Angers","date":"25/09/2018 9:00", "id": "monaco_angers"}
 		},
         {
-			"value": { "teamA":"Nantes", "teamB":"Nice","date":"25/09/2018", "id": "nantes_nice"}
+			"value": { "teamA":"Nantes", "teamB":"Nice","date":"25/09/2018 19:00", "id": "nantes_nice"}
 		},
         {
-			"value": { "teamA":"Toulouse", "teamB":"Saint Etienne","date":"25/09/2018", "id": "toulouse_saint_etienne"}
+			"value": { "teamA":"Toulouse", "teamB":"Saint Etienne","date":"25/09/2018 19:00", "id": "toulouse_saint_etienne"}
 		}
 	]
 }'
