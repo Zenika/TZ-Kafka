@@ -29,7 +29,8 @@
                 {{ props.row.date }}
               </b-table-column>
               <b-table-column field="date" label="Misc" sortable centered>
-                <button v-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
+                <button v-if="isNotYetPronostiquable(props.row)" class="button is-block is-gray">Pronostiquer</button>
+                <button v-else-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
                 <div v-else-if="!hasNoResult(props.row)" class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
               </b-table-column>
             </template>
@@ -105,6 +106,9 @@ export default {
     }
   },
   methods: {
+    isNotYetPronostiquable (match) {
+      return this.hasNoResult(match) && moment(match.date, 'DD/MM/YYYY HH:mm:ss').subtract(1, 'd').isAfter(moment())
+    },
     isPronostiquable (match) {
       return this.hasNoResult(match) && moment(match.date, 'DD/MM/YYYY HH:mm:ss').isAfter(moment())
     },
@@ -156,6 +160,9 @@ export default {
 </script>
 
 <style scoped>
+  .is-gray {
+    background-color:lightgray;
+  }
   .button {
     margin: 0 auto;
   }
