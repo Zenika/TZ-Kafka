@@ -50,7 +50,7 @@ export default {
 
       if (currentScore.length === 1) {
         var index = this.scores.indexOf(currentScore[0])
-        currentScore[0].score = currentScore[0].score + score.score
+        currentScore[0].score = parseInt(currentScore[0].score) + parseInt(score.score)
         this.scores[index] = currentScore[0]
       } else {
         this.scores.push(score)

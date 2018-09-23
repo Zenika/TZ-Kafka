@@ -9,18 +9,8 @@
                   <input class="input is-large" type="username" placeholder="Votre pseudo" autofocus="" v-model="username">
                 </div>
               </div>
-
-              <!--<div class="field">-->
-                <!--<div class="control">-->
-                  <!--<input class="input is-large" type="password" placeholder="Votre mot de passe" v-model="password">-->
-                <!--</div>-->
-              <!--</div>-->
               <button class="button is-block is-info is-large is-fullwidth" v-on:click="login">Connexion</button>
           </div>
-          <p class="has-text-grey">
-            <router-link to="/register">S'inscrire</router-link> &nbsp;·&nbsp;
-            <router-link to="/forger-password">Mot de passe oublié</router-link>
-          </p>
         </div>
       </div>
     </section>

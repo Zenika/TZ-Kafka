@@ -49,14 +49,14 @@ services:
 
   rest-proxy:
     image: confluentinc/cp-kafka-rest
-    hostname: kafka-rest-proxy
+    hostname: rest-proxy
     ports:
       - "8082:8082"
     environment:
       # KAFKA_REST_ZOOKEEPER_CONNECT: zoo1:2181
       KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
       KAFKA_REST_SCHEMA_REGISTRY_URL: http://kafka-schema-registry:8081/
-      KAFKA_REST_HOST_NAME: kafka-rest-proxy
+      KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: PLAINTEXT://kafka1:19092
       KAFKA_REST_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
       KAFKA_REST_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,DELETE,OPTIONS,HEAD
@@ -95,4 +95,4 @@ services:
       - zoo1
       - kafka1
       - kafka-schema-registry
-      - kafka-rest-proxy
+      - rest-proxy

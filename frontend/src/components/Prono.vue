@@ -62,7 +62,6 @@ export default {
   created () {
     pronoService.pronoList.subscribe(prono => {
       this.loaded = true
-      console.log(prono)
       this.pronos.push(prono)
     })
   },
