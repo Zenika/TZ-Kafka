@@ -29,8 +29,9 @@
                 {{ props.row.date }}
               </b-table-column>
               <b-table-column field="date" label="Score" sortable centered>
-                <button v-if="isNotYetPronostiquable(props.row)" class="button is-block is-gray">Pronostiquer</button>
-                <button v-else-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
+                <!-- <button v-if="isNotYetPronostiquable(props.row)" class="button is-block is-gray">Pronostiquer</button> -->
+                <!-- <button v-else-if="isPronostiquable(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button> -->
+                <button v-if="hasNoResult(props.row)" class="button is-block is-info" v-on:click="displayProno(props.row)">Pronostiquer</button>
                 <div v-else-if="!hasNoResult(props.row)" class ="has-text-centered">{{getResult(props.row)[0].teamA}} - {{getResult(props.row)[0].teamB}}</div>
               </b-table-column>
             </template>
@@ -134,13 +135,13 @@ export default {
       var data = {
         'records': [
           {
+            'key': this.matchToBet.matchId,
             'value': { 'match': this.matchToBet,
               'scoreHome': this.scoreHome,
               'scoreAway': this.scoreAway,
-              'user': user,
+              'user': JSON.parse(user),
               'date': moment().format('DD/MM/YYYY HH:mm:ss')
             }
-
           }
         ]
       }

@@ -18,7 +18,7 @@
             default-sort="date">
             <template slot-scope="props">
               <b-table-column field="teamA" label="Utilisateur" sortable>
-                {{ JSON.parse(props.row.user).username}}
+                {{ props.row.user.username}}
               </b-table-column>
 
               <b-table-column field="teamB" label="Equipe domicile" sortable>

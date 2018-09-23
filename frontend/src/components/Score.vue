@@ -23,7 +23,7 @@
 
               <b-table-column field="teamB" label="Total Point" sortable>
                 {{ props.row.score }}
-              </b-table-column>x
+              </b-table-column>
             </template>
           </b-table>
         </div>

@@ -17,8 +17,7 @@ function createConsumer () {
     'format': 'json'
   }
   axiosRequest.post('http://localhost:8082/consumers/' + uuidv4(), data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         // instanceID = response.data.instance_id
@@ -30,10 +29,9 @@ function createConsumer () {
 }
 
 function subscribeToTopics () {
-  var data = {'topics': ['score_topic']}
+  var data = {'topics': ['score']}
   axiosRequest.post(baseURI + '/subscription', data,
-    {headers: {'content-type': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         getRecords()
@@ -43,12 +41,11 @@ function subscribeToTopics () {
 
 function getRecords () {
   axios.get(baseURI + '/records',
-    {headers: {'Accept': 'application/vnd.kafka.json.v2+json',
-      'Access-Control-Allow-Origin': '*'}})
+    {headers: {'Accept': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
         response.data.map(record => {
-          if (record.topic === 'score_topic') {
+          if (record.topic === 'score' && record.value != null) {
             scores.next({
               matchId: record.key,
               score: record.value.score,
