@@ -16,13 +16,16 @@ function createConsumer () {
   var data = { 'auto.offset.reset': 'earliest',
     'format': 'json'
   }
-  axiosRequest.post('http://localhost:8082/consumers/' + uuidv4(), data,
+  var uuid = uuidv4()
+  alert('http://localhost:8082/consumers/' + uuid)
+  axiosRequest.post('http://localhost:8082/consumers/' + uuid, data,
     {headers: {'content-type': 'application/vnd.kafka.json.v2+json'}})
     .then(
       (response) => {
+        alert('http://localhost:8082/consumers/' + uuid + ' response = ' + response)
         // instanceID = response.data.instance_id
         baseURI = response.data.base_uri
-        baseURI = baseURI.replace('kafka-rest-proxy', 'localhost')
+        baseURI = baseURI.replace('rest-proxy', 'localhost')
         subscribeToTopics()
       },
       (error) => { console.log(error) })

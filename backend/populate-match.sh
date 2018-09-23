@@ -53,7 +53,7 @@ curl --request POST \
   --data '{
 	"records": [
 		{
-			"key": "nantes_reims",git
+			"key": "nantes_reims",
 			"value": { "teamA":"0", "teamB":"0"}
 		},
         {

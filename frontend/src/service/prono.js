@@ -22,7 +22,7 @@ function createConsumer () {
       (response) => {
         // instanceID = response.data.instance_id
         baseURI = response.data.base_uri
-        baseURI = baseURI.replace('kafka-rest-proxy', 'localhost')
+        baseURI = baseURI.replace('rest-proxy', 'localhost')
         subscribeToTopics()
       },
       (error) => { console.log(error) })

@@ -55,7 +55,8 @@ public class StreamsExercise {
                     } else if (pronoValue.teamA == pronoValue.teamB && resultValue.teamA == resultValue.teamB) {
                         // Match null sans le bon score
                         score.score = 4;
-                    } else if (pronoValue.teamA > pronoValue.teamB && resultValue.teamA > resultValue.teamB) {
+                    } else if (pronoValue.teamA > pronoValue.teamB && resultValue.teamA > resultValue.teamB
+                            || pronoValue.teamA < pronoValue.teamB && resultValue.teamA < resultValue.teamB) {
                         // Un vainqueur mais sans le bon score
                         score.score = 2;
                     }

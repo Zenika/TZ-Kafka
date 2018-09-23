@@ -47,7 +47,7 @@ services:
       - zoo1
       - kafka1
 
-  kafka-rest-proxy:
+  rest-proxy:
     image: confluentinc/cp-kafka-rest
     hostname: kafka-rest-proxy
     ports:
