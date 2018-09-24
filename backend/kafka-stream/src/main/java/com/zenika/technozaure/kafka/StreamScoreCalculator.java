@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class StreamsExercise {
+public class StreamScoreCalculator {
 
     /**
      * {
@@ -211,7 +211,6 @@ public class StreamsExercise {
         scoreDes.configure(serdeProps, false);
         Serde<Score> scoreSerdes = Serdes.serdeFrom(new JsonPOJOSerializer<>(), scoreDes);
 
-
         Properties streamsConfiguration = new Properties();
         streamsConfiguration.put(StreamsConfig.APPLICATION_ID_CONFIG, "score-calculator");
         streamsConfiguration.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -220,12 +219,6 @@ public class StreamsExercise {
         streamsConfiguration.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
         StreamsBuilder builder = new StreamsBuilder();
-
-//        KStream<String, Prono> prono = builder.stream("prono", Consumed.with(Serdes.String(), pronoSerdes));
-//        prono.to("prono_bis", Produced.with(Serdes.String(), pronoSerdes));
-
-//        KStream<String, Result> results = builder.stream("results", Consumed.with(Serdes.String(), resultSerdes));
-//        results.to("results_bis", Produced.with(Serdes.String(), resultSerdes));
 
         KStream<String, String> pronoStr = builder.stream("prono", Consumed.with(Serdes.String(), Serdes.String()));
         KStream<String, String> resultsStr = builder.stream("results", Consumed.with(Serdes.String(), Serdes.String()));
@@ -252,29 +245,6 @@ public class StreamsExercise {
             score.userId = prono.user.username;
             return score;
         }, JoinWindows.of(TimeUnit.MINUTES.toMillis(10)));
-//
-//        KStream<String, Score> scores = prono.join(results,
-//                (pronoValue, resultValue) -> {
-//                    Score score = new Score();
-//                    score.score = 0;
-//                    if (pronoValue.scoreHome == resultValue.teamA && pronoValue.scoreAway == resultValue.teamB) {
-//                        // Score exact
-//                        score.score = 8;
-//                    } else if (pronoValue.scoreHome == pronoValue.scoreAway && resultValue.teamA == resultValue.teamB) {
-//                        // Match null sans le bon score
-//                        score.score = 4;
-//                    } else if (pronoValue.scoreHome > pronoValue.scoreAway && resultValue.teamA > resultValue.teamB
-//                            || pronoValue.scoreHome < pronoValue.scoreAway && resultValue.teamA < resultValue.teamB) {
-//                        // Un vainqueur mais sans le bon score
-//                        score.score = 2;
-//                    }
-//                    score.userId = pronoValue.user.username;
-//
-//                    return score;
-//                },
-//                JoinWindows.of(TimeUnit.MINUTES.toMillis(2))
-//        );
-//
         scores.to("score", Produced.with(Serdes.String(), scoreSerdes));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), streamsConfiguration);
